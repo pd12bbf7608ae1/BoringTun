@@ -1,0 +1,19 @@
+[Unit]
+Description=WireGuard via boringtun-quick for %I
+After=network-online.target nss-lookup.target
+Wants=network-online.target nss-lookup.target
+Documentation=https://www.wireguard.com/
+Documentation=https://www.wireguard.com/quickstart/
+Documentation=https://git.zx2c4.com/wireguard-tools/about/src/man/wg-quick.8
+Documentation=https://git.zx2c4.com/wireguard-tools/about/src/man/wg.8
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/boringtun --disable-drop-privileges disable-drop-privileges -f %i
+ExecStartPost=/usr/local/sbin/boringtun-quick up %i
+ExecStop=/usr/local/sbin/boringtun-quick down %i
+Environment=WG_ENDPOINT_RESOLUTION_RETRIES=infinity
+
+
+[Install]
+WantedBy=multi-user.target
